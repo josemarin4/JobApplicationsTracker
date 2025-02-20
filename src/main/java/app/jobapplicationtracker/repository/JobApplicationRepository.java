@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface JobApplicaitonRepository extends JpaRepository<JobApplication, UUID> {
+public interface JobApplicationRepository extends JpaRepository<JobApplication, UUID> {
 }
