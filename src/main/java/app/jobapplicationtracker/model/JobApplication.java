@@ -1,5 +1,6 @@
 package app.jobapplicationtracker.model;
 
+import app.jobapplicationtracker.util.Status;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
