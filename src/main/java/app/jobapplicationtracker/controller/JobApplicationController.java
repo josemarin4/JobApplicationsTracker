@@ -4,10 +4,7 @@ import app.jobapplicationtracker.model.JobApplication;
 import app.jobapplicationtracker.service.JobApplicationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -20,8 +17,14 @@ public class JobApplicationController {
 
 
     @GetMapping("/{applicationId}")
-    private ResponseEntity<JobApplication> getApplication(@PathVariable UUID applicationId){
+    public ResponseEntity<JobApplication> getApplication(@PathVariable UUID applicationId){
 
         return ResponseEntity.ok(jobApplicationService.getApplication(applicationId));
+    }
+
+    @PostMapping()
+    public ResponseEntity<JobApplication> addApplication(@RequestBody JobApplication jobApplication){
+
+        return ResponseEntity.ok(jobApplicationService.addApplicaiton(jobApplication));
     }
 }
