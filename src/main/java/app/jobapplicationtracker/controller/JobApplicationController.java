@@ -35,4 +35,10 @@ public class JobApplicationController {
 
         return ResponseEntity.ok(jobApplicationService.updateApplication(applicationId, jobApplication));
     }
+
+    @DeleteMapping("/{applicationId}")
+    public ResponseEntity<JobApplication> deleteApplication(@PathVariable UUID applicationId){
+
+        return ResponseEntity.ok(jobApplicationService.deleteApplication(applicationId));
+    }
 }

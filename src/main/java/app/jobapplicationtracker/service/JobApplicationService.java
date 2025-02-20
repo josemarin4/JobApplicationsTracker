@@ -51,6 +51,14 @@ public class JobApplicationService {
         return appToUpdate;
     }
 
+    public JobApplication deleteApplication(UUID applicationId){
 
+        JobApplication application = jobApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new JobApplicationNotFoundException(
+                    "Job application with id " + applicationId + " not found."));
 
+        jobApplicationRepository.delete(application);
+
+        return application;
+    }
 }
