@@ -3,6 +3,7 @@ package app.jobapplicationtracker.controller;
 import app.jobapplicationtracker.model.JobApplication;
 import app.jobapplicationtracker.service.JobApplicationService;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,5 +27,12 @@ public class JobApplicationController {
     public ResponseEntity<JobApplication> addApplication(@RequestBody JobApplication jobApplication){
 
         return ResponseEntity.ok(jobApplicationService.addApplicaiton(jobApplication));
+    }
+
+    @PutMapping("/{applicationId}")
+    public ResponseEntity<JobApplication> updateApplication(@PathVariable UUID applicationId,
+                                                               @RequestBody JobApplication jobApplication){
+
+        return ResponseEntity.ok(jobApplicationService.updateApplication(applicationId, jobApplication));
     }
 }
