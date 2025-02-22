@@ -3,7 +3,6 @@ package app.jobapplicationtracker.controller;
 import app.jobapplicationtracker.model.JobApplication;
 import app.jobapplicationtracker.service.JobApplicationService;
 import lombok.AllArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

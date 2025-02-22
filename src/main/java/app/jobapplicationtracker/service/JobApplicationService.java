@@ -5,7 +5,6 @@ import app.jobapplicationtracker.exception.JobApplicationNotFoundException;
 import app.jobapplicationtracker.model.JobApplication;
 import app.jobapplicationtracker.repository.JobApplicationRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
