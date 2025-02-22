@@ -1,37 +1,71 @@
-HELP.md
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+### Ignore target directory (Compiled Java files)
+target/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
-
-### IntelliJ IDEA ###
-.idea
-*.iws
+### Ignore IntelliJ IDEA settings
+.idea/
 *.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+### Ignore Eclipse settings
+.project
+.classpath
+.settings/
 
-### VS Code ###
-.vscode/
+### Ignore Maven build files
+mvnw
+mvnw.cmd
+release.properties
+
+### Ignore Gradle (if it was previously used)
+.gradle/
+build/
+gradlew
+gradlew.bat
+settings.gradle
+gradle/
+
+### Ignore logs
+logs/
+*.log
+log/
+
+### Ignore temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+*.swn
+
+### Ignore MacOS system files
+.DS_Store
+
+### Ignore Linux system files
+*.~lock.*
+
+### Ignore environment-specific files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+### Ignore database files (if using H2 or other local databases)
+*.db
+*.mv.db
+*.h2.db
+*.trace.db
+
+### Ignore credentials & secrets
+application.properties
+application.yml
+config/
+secrets/
+
+### Ignore node_modules (if frontend is in the same repo)
+node_modules/
+
+### Ignore AWS / Cloud credentials
+.aws/
+*.pem
+
+### Ignore Docker files (if using Docker)
+docker-compose.override.yml
