@@ -22,7 +22,7 @@ public class JobApplicationService {
                         "Application with id: " + applicationId + " not found."));
     }
 
-    public JobApplication addApplicaiton(JobApplication jobApplication){
+    public JobApplication addApplication(JobApplication jobApplication){
 
         boolean exists = jobApplicationRepository.existsById(jobApplication.getApplicationId());
 

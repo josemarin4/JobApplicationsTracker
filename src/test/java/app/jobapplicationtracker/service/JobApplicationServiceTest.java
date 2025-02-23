@@ -80,7 +80,7 @@ public class JobApplicationServiceTest {
         when(jobApplicationRepository.existsById(jobApplication.getApplicationId())).thenReturn(false);
         when(jobApplicationRepository.save(jobApplication)).thenReturn(jobApplication);
 
-        JobApplication savedApplication = jobApplicationService.addApplicaiton(jobApplication);
+        JobApplication savedApplication = jobApplicationService.addApplication(jobApplication);
 
         assertThat(savedApplication).isNotNull();
         assertThat(savedApplication.getApplicationId()).isEqualTo(jobApplication.getApplicationId());
@@ -94,7 +94,7 @@ public class JobApplicationServiceTest {
     public void shouldThrowExceptionWhenJobApplicationAlreadyExists() {
         when(jobApplicationRepository.existsById(jobApplication.getApplicationId())).thenReturn(true);
 
-        assertThatThrownBy(() -> jobApplicationService.addApplicaiton(jobApplication))
+        assertThatThrownBy(() -> jobApplicationService.addApplication(jobApplication))
                 .isInstanceOf(DuplicateJobApplicationException.class)
                 .hasMessageContaining("Job application with id " + jobApplication.getApplicationId() + " already exists.");
 
@@ -141,5 +141,35 @@ public class JobApplicationServiceTest {
 
         verify(jobApplicationRepository).findById(nonExistentId);
         verify(jobApplicationRepository, never()).save(any());
+    }
+
+    @Test
+    public void shouldDeleteJobApplicationWhenIdExists() {
+        UUID id = jobApplication.getApplicationId();
+
+        when(jobApplicationRepository.findById(id)).thenReturn(Optional.of(jobApplication));
+
+        JobApplication deletedApplication = jobApplicationService.deleteApplication(id);
+
+        assertThat(deletedApplication).isNotNull();
+        assertThat(deletedApplication.getApplicationId()).isEqualTo(id);
+        assertThat(deletedApplication.getApplicationTitle()).isEqualTo(jobApplication.getApplicationTitle());
+
+        verify(jobApplicationRepository).findById(id);
+        verify(jobApplicationRepository).delete(jobApplication);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenDeletingNonExistentJobApplication() {
+        UUID nonExistentId = UUID.randomUUID();
+
+        when(jobApplicationRepository.findById(nonExistentId)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> jobApplicationService.deleteApplication(nonExistentId))
+                .isInstanceOf(JobApplicationNotFoundException.class)
+                .hasMessageContaining("Job application with id " + nonExistentId + " not found.");
+
+        verify(jobApplicationRepository).findById(nonExistentId);
+        verify(jobApplicationRepository, never()).delete(any());
     }
 }

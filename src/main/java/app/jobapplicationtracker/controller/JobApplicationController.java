@@ -25,7 +25,7 @@ public class JobApplicationController {
     @PostMapping()
     public ResponseEntity<JobApplication> addApplication(@RequestBody JobApplication jobApplication){
 
-        return ResponseEntity.ok(jobApplicationService.addApplicaiton(jobApplication));
+        return ResponseEntity.ok(jobApplicationService.addApplication(jobApplication));
     }
 
     @PutMapping("/{applicationId}")
