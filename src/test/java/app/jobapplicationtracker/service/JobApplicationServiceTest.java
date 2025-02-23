@@ -63,8 +63,7 @@ public class JobApplicationServiceTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenJobApplicationNotFound(){
-
+    public void shouldThrowExceptionWhenJobApplicationNotFound() {
         UUID nonExistentId = UUID.randomUUID();
 
         when(jobApplicationRepository.findById(nonExistentId)).thenReturn(Optional.empty());
@@ -78,14 +77,11 @@ public class JobApplicationServiceTest {
 
     @Test
     public void shouldAddJobApplicationWhenItDoesNotExist() {
-        // Given: The job application does not exist
         when(jobApplicationRepository.existsById(jobApplication.getApplicationId())).thenReturn(false);
         when(jobApplicationRepository.save(jobApplication)).thenReturn(jobApplication);
 
-        // When: We add a new job application
         JobApplication savedApplication = jobApplicationService.addApplicaiton(jobApplication);
 
-        // Then: It should be saved successfully
         assertThat(savedApplication).isNotNull();
         assertThat(savedApplication.getApplicationId()).isEqualTo(jobApplication.getApplicationId());
         assertThat(savedApplication.getApplicationTitle()).isEqualTo(jobApplication.getApplicationTitle());
@@ -96,16 +92,54 @@ public class JobApplicationServiceTest {
 
     @Test
     public void shouldThrowExceptionWhenJobApplicationAlreadyExists() {
-
         when(jobApplicationRepository.existsById(jobApplication.getApplicationId())).thenReturn(true);
-
 
         assertThatThrownBy(() -> jobApplicationService.addApplicaiton(jobApplication))
                 .isInstanceOf(DuplicateJobApplicationException.class)
                 .hasMessageContaining("Job application with id " + jobApplication.getApplicationId() + " already exists.");
 
-
         verify(jobApplicationRepository).existsById(jobApplication.getApplicationId());
+        verify(jobApplicationRepository, never()).save(any());
+    }
+
+    @Test
+    public void shouldUpdateJobApplicationWhenIdExists() {
+        UUID id = jobApplication.getApplicationId();
+        JobApplication updatedJobApplication = new JobApplication();
+        updatedJobApplication.setApplicationTitle("Senior Software Engineer");
+        updatedJobApplication.setCompanyName("Amazon");
+        updatedJobApplication.setStatus(Status.INTERVIEW);
+        updatedJobApplication.setDateApplied(LocalDate.of(2024, 2, 10));
+
+        when(jobApplicationRepository.findById(id)).thenReturn(Optional.of(jobApplication));
+
+        JobApplication result = jobApplicationService.updateApplication(id, updatedJobApplication);
+
+        assertThat(result.getApplicationTitle()).isEqualTo(updatedJobApplication.getApplicationTitle());
+        assertThat(result.getCompanyName()).isEqualTo(updatedJobApplication.getCompanyName());
+        assertThat(result.getStatus()).isEqualTo(updatedJobApplication.getStatus());
+        assertThat(result.getDateApplied()).isEqualTo(updatedJobApplication.getDateApplied());
+
+        verify(jobApplicationRepository).findById(id);
+        verify(jobApplicationRepository).save(jobApplication);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenUpdatingNonExistentJobApplication() {
+        UUID nonExistentId = UUID.randomUUID();
+        JobApplication updatedJobApplication = new JobApplication();
+        updatedJobApplication.setApplicationTitle("Senior Software Engineer");
+        updatedJobApplication.setCompanyName("Amazon");
+        updatedJobApplication.setStatus(Status.INTERVIEW);
+        updatedJobApplication.setDateApplied(LocalDate.of(2024, 2, 10));
+
+        when(jobApplicationRepository.findById(nonExistentId)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> jobApplicationService.updateApplication(nonExistentId, updatedJobApplication))
+                .isInstanceOf(JobApplicationNotFoundException.class)
+                .hasMessageContaining("Application with id: " + nonExistentId + " not found.");
+
+        verify(jobApplicationRepository).findById(nonExistentId);
         verify(jobApplicationRepository, never()).save(any());
     }
 }
