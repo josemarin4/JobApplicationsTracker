@@ -1,5 +1,6 @@
 package app.jobapplicationtracker.service;
 
+import app.jobapplicationtracker.exception.DuplicateJobApplicationException;
 import app.jobapplicationtracker.exception.JobApplicationNotFoundException;
 import app.jobapplicationtracker.model.JobApplication;
 import app.jobapplicationtracker.repository.JobApplicationRepository;
@@ -73,5 +74,38 @@ public class JobApplicationServiceTest {
                 .hasMessageContaining("Application with id: " + nonExistentId + " not found.");
 
         verify(jobApplicationRepository).findById(nonExistentId);
+    }
+
+    @Test
+    public void shouldAddJobApplicationWhenItDoesNotExist() {
+        // Given: The job application does not exist
+        when(jobApplicationRepository.existsById(jobApplication.getApplicationId())).thenReturn(false);
+        when(jobApplicationRepository.save(jobApplication)).thenReturn(jobApplication);
+
+        // When: We add a new job application
+        JobApplication savedApplication = jobApplicationService.addApplicaiton(jobApplication);
+
+        // Then: It should be saved successfully
+        assertThat(savedApplication).isNotNull();
+        assertThat(savedApplication.getApplicationId()).isEqualTo(jobApplication.getApplicationId());
+        assertThat(savedApplication.getApplicationTitle()).isEqualTo(jobApplication.getApplicationTitle());
+
+        verify(jobApplicationRepository).existsById(jobApplication.getApplicationId());
+        verify(jobApplicationRepository).save(jobApplication);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenJobApplicationAlreadyExists() {
+
+        when(jobApplicationRepository.existsById(jobApplication.getApplicationId())).thenReturn(true);
+
+
+        assertThatThrownBy(() -> jobApplicationService.addApplicaiton(jobApplication))
+                .isInstanceOf(DuplicateJobApplicationException.class)
+                .hasMessageContaining("Job application with id " + jobApplication.getApplicationId() + " already exists.");
+
+
+        verify(jobApplicationRepository).existsById(jobApplication.getApplicationId());
+        verify(jobApplicationRepository, never()).save(any());
     }
 }
